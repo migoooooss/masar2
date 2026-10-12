@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#047857">
+  <meta name="description" content="لوحة شخصية لإدارة أهدافك وقياس تقدمك خلال عشرة أشهر.">
+  <title>مسار | لوحة إدارة الأهداف</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark">م</div>
+        <div><strong>مَسار</strong><small>لوحة قيادة شخصية</small></div>
+      </div>
+      <div class="period-card">
+        <span class="eyebrow">الفترة الحالية</span>
+        <strong id="periodLabel">10 أشهر</strong>
+        <div class="period-track"><span id="periodTrackFill"></span></div>
+        <small id="periodDates">—</small>
+      </div>
+      <nav class="nav-menu" aria-label="التنقل الرئيسي">
+        <button class="nav-item active" data-view="dashboard"><span class="nav-icon">▦</span> نظرة عامة</button>
+        <button class="nav-item" data-view="daily"><span class="nav-icon">＋</span> السجل اليومي</button>
+        <button class="nav-item" data-view="goals"><span class="nav-icon">◎</span> الأهداف والمؤشرات</button>
+        <button class="nav-item" data-view="analytics"><span class="nav-icon">⌁</span> التحليلات والرسوم</button>
+        <button class="nav-item" data-view="reports"><span class="nav-icon">▤</span> التقارير والتصدير</button>
+        <button class="nav-item" data-view="settings"><span class="nav-icon">⚙</span> الإعدادات والنسخ الاحتياطي</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="privacy-note"><span class="privacy-dot"></span><div><strong>بياناتك محلية</strong><small>لا تُرسل إلى أي خادم</small></div></div>
+        <small class="version">مسار · الإصدار 1.0</small>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <button class="mobile-menu icon-button" id="mobileMenu" aria-label="فتح القائمة">☰</button>
+        <div class="page-heading"><span class="eyebrow" id="todayLabel">لوحة التحكم</span><h1 id="pageTitle">نظرة عامة</h1></div>
+        <div class="top-actions">
+          <span class="today-pill" id="headerDate"></span>
+          <button class="button button-primary" id="quickLogBtn">＋ تسجيل اليوم</button>
+        </div>
+      </header>
+
+      <section class="view active" id="view-dashboard">
+        <div class="welcome-row">
+          <div><span class="eyebrow">التقدم يُقاس بالفعل</span><h2>كل يوم يترك أثرًا.</h2><p>سجّل ما أنجزته، وقارن النتائج بهدفك خلال عشرة أشهر.</p></div>
+          <div class="streak-card"><div class="streak-symbol">↗</div><div><small>أيام مسجلة</small><strong id="loggedDays">0</strong><span id="streakCaption">ابدأ بتسجيل يومك الأول</span></div></div>
+        </div>
+        <div class="metric-grid">
+          <article class="metric-card main-metric"><div class="metric-top"><span>التقدم العام</span><span class="metric-icon">◎</span></div><div class="metric-value"><strong id="overallProgress">0%</strong><span id="overallDelta">من 100%</span></div><div class="progress-track"><span id="overallBar"></span></div><small id="overallHint">متوسط مؤشرات الأهداف الرئيسية</small></article>
+          <article class="metric-card"><div class="metric-top"><span>دخل الشهر</span><span class="metric-icon">↗</span></div><div class="metric-value"><strong id="monthIncome">$0</strong><span id="incomeTargetText">هدف: $2,000</span></div><div class="progress-track"><span id="incomeBar"></span></div><small id="incomeHint">الدخل المسجل هذا الشهر</small></article>
+          <article class="metric-card"><div class="metric-top"><span>المدخرات</span><span class="metric-icon">◈</span></div><div class="metric-value"><strong id="totalSaved">$0</strong><span id="savingsTargetText">هدف: $12,000</span></div><div class="progress-track"><span id="savingsBar"></span></div><small>إجمالي ما سجلته كمدخرات</small></article>
+          <article class="metric-card"><div class="metric-top"><span>ساعات التركيز</span><span class="metric-icon">◷</span></div><div class="metric-value"><strong id="focusHours">0</strong><span>ساعة</span></div><div class="progress-track"><span id="focusBar"></span></div><small>عمل + دراسة مسجلان</small></article>
+        </div>
+        <div class="content-grid">
+          <article class="panel chart-panel"><div class="panel-heading"><div><h3>إيقاع الإنجاز</h3><p>ساعات العمل والدراسة خلال آخر 14 يومًا</p></div><select id="dashboardChartMode" class="select-compact"><option value="hours">ساعات التركيز</option><option value="income">الدخل اليومي</option><option value="study">ساعات الدراسة</option></select></div><div class="chart-wrap"><canvas id="dashboardChart" aria-label="رسم بياني للتقدم" role="img"></canvas><div class="empty-chart" id="dashboardChartEmpty">سجّل يومًا واحدًا على الأقل لعرض الرسم.</div></div></article>
+          <article class="panel"><div class="panel-heading"><div><h3>الأهداف الرئيسية</h3><p>تقدم كل مسار نحو هدفه</p></div><button class="text-button" data-goto="goals">عرض الكل ←</button></div><div id="goalSummaryList" class="goal-summary-list"></div></article>
+        </div>
+        <div class="content-grid bottom-grid">
+          <article class="panel"><div class="panel-heading"><div><h3>آخر التسجيلات</h3><p>أحدث ما أضفته إلى سجلك</p></div><button class="text-button" data-goto="daily">السجل الكامل ←</button></div><div id="recentLogs" class="recent-list"></div></article>
+          <article class="panel insight-panel"><div class="panel-heading"><div><h3>مؤشر الانضباط</h3><p>انتظام التسجيل والأنشطة</p></div><span class="badge-soft">يتحدث تلقائيًا</span></div><div class="discipline-ring" id="disciplineRing"><div><strong id="disciplineScore">0%</strong><small>آخر 7 أيام</small></div></div><p class="insight-text" id="disciplineText">ابدأ بتسجيل نشاطك حتى يظهر تحليل الانتظام.</p><div class="mini-stats"><div><strong id="weekWork">0h</strong><small>عمل هذا الأسبوع</small></div><div><strong id="weekStudy">0h</strong><small>دراسة هذا الأسبوع</small></div><div><strong id="weekGym">0</strong><small>جلسات تمرين</small></div></div></article>
+        </div>
+      </section>
+
+      <section class="view" id="view-daily">
+        <div class="section-intro"><div><h2>السجل اليومي</h2><p>سجّل النتائج الفعلية. يمكنك تعديل سجل تاريخ سابق باختيار التاريخ نفسه.</p></div><button class="button button-secondary" id="clearFormBtn">تفريغ الحقول</button></div>
+        <form id="dailyForm" class="panel form-panel">
+          <div class="form-section-head"><span class="section-number">01</span><div><h3>التاريخ والمال</h3><p>سجّل الدخل والمدخرات الفعلية، لا التوقعات.</p></div></div>
+          <div class="form-grid">
+            <label>تاريخ السجل<input type="date" id="logDate" required></label>
+            <label>دخل اليوم بالدولار (USD)<input type="number" id="incomeUsd" min="0" step="0.01" placeholder="0.00"></label>
+            <label>دخل اليوم بالجنيه المصري (EGP)<input type="number" id="incomeEgp" min="0" step="0.01" placeholder="0.00"></label>
+            <label>مدخرات أضفتها اليوم بالدولار<input type="number" id="savedUsd" min="0" step="0.01" placeholder="0.00"></label>
+            <label>مصروفات اليوم بالجنيه<input type="number" id="expensesEgp" min="0" step="0.01" placeholder="0.00"></label>
+          </div>
+          <div class="form-section-head"><span class="section-number">02</span><div><h3>العمل والدراسة</h3><p>الوقت المنجز ونتيجة الدراسة أهم من مجرد التخطيط.</p></div></div>
+          <div class="form-grid">
+            <label>ساعات العمل المدفوع<input type="number" id="workHours" min="0" max="24" step="0.25" placeholder="0"></label>
+            <label>ساعات تطوير المهارة / بناء المشروع<input type="number" id="skillHours" min="0" max="24" step="0.25" placeholder="0"></label>
+            <label>ساعات الدراسة المدرسية<input type="number" id="studyHours" min="0" max="24" step="0.25" placeholder="0"></label>
+            <label>درجة اختبار أو مراجعة (%)<input type="number" id="studyScore" min="0" max="100" step="0.1" placeholder="اختياري"></label>
+            <label>مهام مهمة أُنجزت<input type="number" id="tasksDone" min="0" step="1" placeholder="0"></label>
+            <label>مهام مخطط لها<input type="number" id="tasksPlanned" min="0" step="1" placeholder="0"></label>
+          </div>
+          <div class="form-section-head"><span class="section-number">03</span><div><h3>الجسم واللياقة</h3><p>قِس الاستمرارية، وسجّل الوزن عند توفر قياس موثوق.</p></div></div>
+          <div class="form-grid">
+            <label>مدة التمرين بالدقائق<input type="number" id="gymMinutes" min="0" max="600" step="5" placeholder="0"></label>
+            <label class="check-label">هل أنجزت جلسة تمرين؟<span class="check-control"><input type="checkbox" id="workoutDone"> <span>نعم، تمرنت اليوم</span></span></label>
+            <label>الوزن (كجم)<input type="number" id="weightKg" min="20" max="400" step="0.1" placeholder="اختياري"></label>
+            <label>محيط الخصر (سم)<input type="number" id="waistCm" min="30" max="250" step="0.1" placeholder="اختياري"></label>
+          </div>
+          <div class="form-section-head"><span class="section-number">04</span><div><h3>اللغات والطاقة</h3><p>الدقائق اليومية تُجمع تلقائيًا في التقارير.</p></div></div>
+          <div class="form-grid">
+            <label>الإنجليزية (دقائق)<input type="number" id="englishMin" min="0" max="1440" step="5" placeholder="0"></label>
+            <label>الألمانية (دقائق)<input type="number" id="germanMin" min="0" max="1440" step="5" placeholder="0"></label>
+            <label>التركية (دقائق)<input type="number" id="turkishMin" min="0" max="1440" step="5" placeholder="0"></label>
+            <label>الطاقة اليوم (1–5)<select id="energy"><option value="">لم أحدد</option><option value="1">1 — منخفضة جدًا</option><option value="2">2 — منخفضة</option><option value="3">3 — متوسطة</option><option value="4">4 — جيدة</option><option value="5">5 — مرتفعة</option></select></label>
+          </div>
+          <label class="full-label">ملاحظات اليوم<textarea id="notes" rows="3" placeholder="ما الذي نجح؟ ما العائق؟ وما الخطوة التالية؟"></textarea></label>
+          <div class="form-footer"><span id="formStatus" class="form-status">السجل محفوظ على هذا الجهاز فقط.</span><div><button type="button" class="button button-ghost" id="deleteLogBtn">حذف سجل هذا التاريخ</button><button type="submit" class="button button-primary">حفظ السجل</button></div></div>
+        </form>
+        <article class="panel table-panel"><div class="panel-heading"><div><h3>سجل الأيام</h3><p>اضغط على أي يوم لتحميله في نموذج التعديل.</p></div><span class="count-pill" id="logCount">0 سجل</span></div><div class="table-scroll"><table><thead><tr><th>التاريخ</th><th>الدخل USD</th><th>العمل</th><th>الدراسة</th><th>التمرين</th><th>اللغات</th><th>درجة الدراسة</th><th></th></tr></thead><tbody id="logsTableBody"></tbody></table></div></article>
+      </section>
+
+      <section class="view" id="view-goals">
+        <div class="section-intro"><div><h2>الأهداف والمؤشرات</h2><p>عدّل الأرقام لتناسب خطتك الفعلية. النسب تتحدث تلقائيًا بناءً على السجلات.</p></div><button class="button button-primary" id="saveGoalsBtn">حفظ الأهداف</button></div>
+        <div class="goal-cards-grid" id="goalCards"></div>
+        <article class="panel goals-settings-panel"><div class="panel-heading"><div><h3>تعديل المستهدفات</h3><p>هذه قيم بداية قابلة للتغيير وليست ضمانًا للنتائج.</p></div></div>
+          <div class="form-grid">
+            <label>هدف الادخار خلال 10 أشهر (USD)<input type="number" id="targetSavings" min="0" step="100"></label>
+            <label>هدف الدخل الشهري (USD)<input type="number" id="targetMonthlyIncome" min="0" step="50"></label>
+            <label>هدف ساعات العمل + تطوير المهارة شهريًا<input type="number" id="targetWorkHours" min="0" step="5"></label>
+            <label>هدف الدراسة الأسبوعي (ساعات)<input type="number" id="targetStudyHours" min="0" step="1"></label>
+            <label>هدف التمرين الأسبوعي (جلسات)<input type="number" id="targetWorkouts" min="0" max="14" step="1"></label>
+            <label>هدف الإنجليزية النهائي<select id="targetEnglish"><option value="A2">A2</option><option value="B1">B1</option><option value="B2">B2</option><option value="C1">C1</option></select></label>
+            <label>هدف الألمانية النهائي<select id="targetGerman"><option value="A1">A1</option><option value="A2">A2</option><option value="B1">B1</option><option value="B2">B2</option></select></label>
+            <label>هدف التركية النهائي<select id="targetTurkish"><option value="A1">A1</option><option value="A2">A2</option><option value="B1">B1</option><option value="B2">B2</option></select></label>
+          </div>
+          <div class="language-note"><strong>كيف تُحسب اللغة؟</strong><p>تُعرض دقائق الممارسة الفعلية ونسبة الانتظام. مستوى CEFR لا يمكن استنتاجه بدقة من عدد الدقائق وحده؛ حدّث مستواك يدويًا من بطاقة اللغة بعد اختبار مناسب.</p></div>
+          <div class="language-level-grid" id="languageLevelControls"></div>
+          <div class="form-grid date-settings">
+            <label>بداية خطة العشرة أشهر<input type="date" id="planStartDate"></label>
+            <label>نهاية الخطة (تُحسب تلقائيًا)<input type="text" id="planEndDate" readonly></label>
+          </div>
+        </article>
+      </section>
+
+      <section class="view" id="view-analytics">
+        <div class="section-intro"><div><h2>التحليلات والرسوم</h2><p>حلّل الاتجاهات حسب الفترة، وليس من يوم منفرد فقط.</p></div><div class="range-controls"><label>من<input type="date" id="analyticsFrom"></label><label>إلى<input type="date" id="analyticsTo"></label><button class="button button-secondary" id="applyAnalytics">تطبيق</button></div></div>
+        <div class="analytics-grid">
+          <article class="panel wide-chart"><div class="panel-heading"><div><h3>الوقت حسب النشاط</h3><p>إجمالي الساعات في الفترة المحددة</p></div></div><div class="chart-wrap tall"><canvas id="timeBreakdownChart"></canvas><div class="empty-chart" id="timeBreakdownEmpty">لا توجد بيانات كافية.</div></div></article>
+          <article class="panel"><div class="panel-heading"><div><h3>توزيع وقت اللغات</h3><p>الدقائق المسجلة لكل لغة</p></div></div><div class="chart-wrap"><canvas id="languageChart"></canvas><div class="empty-chart" id="languageChartEmpty">سجّل وقتًا للغات لعرض التوزيع.</div></div></article>
+          <article class="panel"><div class="panel-heading"><div><h3>الدخل والمدخرات</h3><p>تراكم الدخل المسجل والمدخرات اليومية</p></div></div><div class="chart-wrap"><canvas id="moneyChart"></canvas><div class="empty-chart" id="moneyChartEmpty">أضف دخلًا أو مدخرات لعرض الرسم.</div></div></article>
+          <article class="panel wide-chart"><div class="panel-heading"><div><h3>اتجاه الدراسة واللياقة</h3><p>مقارنة أسبوعية بين ساعات الدراسة وعدد جلسات التمرين</p></div></div><div class="chart-wrap tall"><canvas id="studyGymChart"></canvas><div class="empty-chart" id="studyGymEmpty">سجّل الدراسة والتمرين لعرض الاتجاه.</div></div></article>
+        </div>
+        <div class="metric-grid analytics-metrics"><article class="metric-card"><div class="metric-top"><span>متوسط الدراسة اليومي</span><span class="metric-icon">⌁</span></div><div class="metric-value"><strong id="avgStudy">0</strong><span>ساعة</span></div><small>على الأيام المسجلة في الفترة</small></article><article class="metric-card"><div class="metric-top"><span>إجمالي التمرين</span><span class="metric-icon">↗</span></div><div class="metric-value"><strong id="totalGym">0</strong><span>دقيقة</span></div><small>المدة المسجلة</small></article><article class="metric-card"><div class="metric-top"><span>إنجاز المهام</span><span class="metric-icon">✓</span></div><div class="metric-value"><strong id="taskRate">0%</strong></div><small>المهام المنجزة ÷ المخطط لها</small></article><article class="metric-card"><div class="metric-top"><span>متوسط الطاقة</span><span class="metric-icon">✳</span></div><div class="metric-value"><strong id="avgEnergy">—</strong><span>/ 5</span></div><small>حسب تسجيلات الطاقة</small></article></div>
+      </section>
+
+      <section class="view" id="view-reports">
+        <div class="section-intro"><div><h2>التقارير والتصدير</h2><p>أنشئ ملخصًا للفترة، أو صدّر بياناتك للاحتفاظ بنسخة خارج المتصفح.</p></div><button class="button button-primary" id="printReportBtn">طباعة / حفظ PDF</button></div>
+        <article class="panel report-controls"><div class="form-grid"><label>بداية التقرير<input type="date" id="reportFrom"></label><label>نهاية التقرير<input type="date" id="reportTo"></label><label>نوع التقرير<select id="reportType"><option value="summary">ملخص تنفيذي</option><option value="detailed">تفصيلي حسب الأيام</option></select></label><label>عملة عرض الدخل<select id="reportCurrency"><option value="USD">الدولار (USD)</option><option value="EGP">الجنيه المصري (EGP)</option></select></label></div><button class="button button-secondary" id="generateReportBtn">تحديث التقرير</button></article>
+        <div id="reportOutput" class="report-output"></div>
+        <div class="export-grid">
+          <article class="panel export-card"><div class="export-icon">⇩</div><h3>تصدير CSV</h3><p>افتح بيانات الأيام في Excel أو Google Sheets للتحليل المستقل.</p><button class="button button-secondary" id="exportCsvBtn">تصدير السجل اليومي</button></article>
+          <article class="panel export-card"><div class="export-icon">⬇</div><h3>نسخة احتياطية JSON</h3><p>تتضمن الإعدادات والأهداف وكل السجلات. استخدمها للاستعادة أو النقل لجهاز آخر.</p><button class="button button-primary" id="exportJsonBtn">تنزيل النسخة الاحتياطية</button></article>
+        </div>
+      </section>
+
+      <section class="view" id="view-settings">
+        <div class="section-intro"><div><h2>الإعدادات والنسخ الاحتياطي</h2><p>التطبيق يعمل دون حساب أو خادم. مسح بيانات المتصفح قد يحذف السجلات إذا لم تصدّر نسخة احتياطية.</p></div></div>
+        <div class="settings-grid">
+          <article class="panel settings-card"><div class="settings-icon">◈</div><h3>حفظ واستعادة البيانات</h3><p>نزّل نسخة JSON دورية، واستوردها عند الحاجة. الاستيراد يستبدل البيانات الحالية بعد تأكيدك.</p><button class="button button-primary" id="settingsExport">تنزيل نسخة احتياطية</button><label class="button button-secondary file-button">استيراد نسخة JSON<input type="file" id="importJsonInput" accept=".json,application/json"></label><small class="muted" id="backupStatus">لم يتم استيراد نسخة في هذه الجلسة.</small></article>
+          <article class="panel settings-card"><div class="settings-icon">◷</div><h3>الفترة والخطة</h3><p>تبدأ الخطة من التاريخ المحدد وتنتهي بعد عشرة أشهر تقويمية. يمكنك تغيير البداية في صفحة الأهداف.</p><div class="setting-line"><span>بداية الخطة</span><strong id="settingsStart">—</strong></div><div class="setting-line"><span>نهاية الخطة</span><strong id="settingsEnd">—</strong></div><div class="setting-line"><span>الوقت المنقضي</span><strong id="settingsElapsed">0%</strong></div></article>
+          <article class="panel settings-card danger-card"><div class="settings-icon">!</div><h3>إعادة ضبط التطبيق</h3><p>يحذف هذا الإجراء كل السجلات والأهداف المخزنة في هذا المتصفح. صدّر نسخة احتياطية أولًا إن أردت الاحتفاظ ببياناتك.</p><button class="button button-danger" id="resetAppBtn">حذف كل البيانات وإعادة الضبط</button></article>
+          <article class="panel settings-card"><div class="settings-icon">i</div><h3>كيف تُحسب المؤشرات؟</h3><ul class="method-list"><li><strong>التقدم العام:</strong> متوسط تقدم مؤشرات الأهداف، مع حد أقصى 100% لكل مؤشر.</li><li><strong>الدخل الشهري:</strong> مجموع الدخل المسجل في الشهر الحالي؛ لا يساوي الربح الصافي تلقائيًا.</li><li><strong>المدخرات:</strong> مجموع مبالغ الادخار التي سجلتها؛ لا تُخصم المصروفات تلقائيًا من هذا الرقم.</li><li><strong>الانتظام:</strong> أيام النشاط المسجلة في آخر 7 أيام ÷ 7.</li><li><strong>اللغة:</strong> دقائق الممارسة تقيس الجهد، ولا تثبت مستوى CEFR دون اختبار.</li></ul></article>
+        </div>
+      </section>
+
+      <footer class="app-footer"><span>مسار — تتبّع التقدم، لا النوايا فقط.</span><span>حفظ محلي · تصدير متاح · دون تتبع خارجي</span></footer>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="./app.js"></script>
+</body>
+</html>
